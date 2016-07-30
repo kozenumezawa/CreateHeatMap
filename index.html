@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ja">
+    <heat>
+        <meta charset="UTF-8">
+        <title>CreateHeatMap</title>
+
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    </heat>
+</html>
+
+<body>
+<script>
+    d3.csv('./analysis_output.csv', function(csv){ //csvデータの読み込み
+        //  Stringを数値に変換
+        csv.forEach((element, idx) => {
+            element.value = Number(element.value);
+        });
+
+        var max = d3.max(csv, function(d){ return Number(d.value) });
+        var min = d3.min(csv, function(d){ return Number(d.value) });
+
+        var colorScale = d3.scale.linear().domain([min, max]).range(["#FFF0F5", "#BC143C"]); //カラースケールを作成
+
+        var  x_range  = d3.range(25);
+
+        var data = 	d3.nest().key(function(d){return d.type;}).entries(csv); //CSVから取得したデータをdateフィールドの値でネスト
+
+        var tbody = d3.select('body').append('table').append('tbody'); //table作成
+        var tfoot = d3.select('table').append('tfoot'); //tableにtfootをappend
+
+        tfoot.append('th'); //空th追加
+
+        //tfootに時間thを追加
+        tfoot.selectAll('class')
+                .data(x_range)
+                .enter()
+                .append('th')
+                .attr("class", "hours")
+                .text(function(d){ return d});
+
+
+            //tr追加
+            var trs = tbody.selectAll('tr')
+                    .data(data)
+                    .enter()
+                    .append('tr')
+
+            //thに年月日を追加
+            trs.append('th').text(function(d){
+                return d.key;
+            });
+
+
+            //td追加
+            trs.selectAll('td')
+                    .data(function(d){ return d.values} )
+                    .enter()
+                    .append('td')
+                    .style("background-color", function(d){ return colorScale(d.value); })
+                    .on('mouseover', function(d){
+                        d3.select(this).text(d.value); //mouoverした際に訪問者数を表示
+                    })
+                    .on("mouseout", function(d){
+                        d3.select(this).text("");
+                    });
+
+        });
+</script>
+</body>
