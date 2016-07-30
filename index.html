@@ -14,7 +14,7 @@
                 color:midnightblue;
             }
         </style>
-        
+
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     </heat>
 </html>
@@ -23,14 +23,14 @@
 <script>
     d3.csv('./analysis_output.csv', function(csv){ //csvデータの読み込み
         //  Stringを数値に変換
-        csv.forEach((element, idx) => {
-            element.value = Number(element.value);
-        });
+        for(var i = 0; i < csv.length; i++){
+            csv[i].value = Number(csv[i].value);
+        }
 
         var max = d3.max(csv, function(d){ return Number(d.value) });
         var min = d3.min(csv, function(d){ return Number(d.value) });
 
-        var colorScale = d3.scale.linear().domain([min, max]).range(["#FFF0F5", "#BC143C"]); //カラースケールを作成
+        var colorScale = d3.scale.linear().domain([min, max]).range(["#E5F0FF", "#2C14BC"]); //カラースケールを作成
 
         var  x_range  = d3.range(25);
 
