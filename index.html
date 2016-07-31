@@ -32,7 +32,7 @@
 
         var colorScale = d3.scale.linear().domain([min, max]).range(["#E5F0FF", "#2C14BC"]); //カラースケールを作成
 
-        var  x_range  = d3.range(25);
+        var  x_range  = d3.range(1 + d3.max(csv, function(d){ return Number(d.time)}));
 
         var data = 	d3.nest().key(function(d){return d.type;}).entries(csv); //CSVから取得したデータをdateフィールドの値でネスト
 
