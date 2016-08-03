@@ -16,6 +16,7 @@
         </style>
 
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.10.0/d3-legend.min.js"></script>
     </heat>
 </html>
 
@@ -75,6 +76,24 @@
                         d3.select(this).text("");
                     });
 
-        });
+        var svg = d3.select("body").append("svg");
+        
+        //凡例
+            var svg = d3.select('svg');
+            //凡例を配置するグループ要素を追加
+            var legendView = svg.append("g")
+                .attr("class", "legendQuant")
+                .attr("transform", "translate(20,20)");
+
+            //スケールを元に凡例を生成する
+            var legend = d3.legend.color().scale(colorScale);
+
+            //凡例を描画する
+            svg.select(".legendQuant")
+                .call(legend);
+    });
+
+
+
 </script>
 </body>
